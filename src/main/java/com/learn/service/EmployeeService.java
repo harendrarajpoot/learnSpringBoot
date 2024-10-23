@@ -1,10 +1,12 @@
 package com.learn.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.learn.exception.EmployeeNotFoundException;
 import com.learn.model.Employee;
 import com.learn.repo.EmployeeRepository;
 
@@ -32,13 +34,9 @@ public class EmployeeService {
 	}
 
 	
-	public Employee getEmployee(int empCode)
+	public Optional<Employee> getEmployee(int empCode)
 	{
-		System.out.println("EmployeeService--->getEmployee--->staring");
-		Employee employee = employeeRepository.findById(empCode).get();// fetch data single object from db
-		System.out.println("EmployeeService--->getEmployee--->ENd");
-		
-		 return employee;
+		return employeeRepository.findById(empCode);
 	}
 	
 	public void deleteEmployee(int empCode)

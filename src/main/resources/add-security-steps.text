@@ -1,0 +1,59 @@
+step1:- add spring security dependency in your pom.xml file
+
+
+ <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency> 
+
+
+once you have added this dependency in your pom.xml file u are able to access spring security defalut configuration
+
+then chekc your api then u will get default secruity for your apies .
+
+default username --> user
+password ---> generate in your console
+
+
+step2  ---, if you want change your default username and password then you have to specify username and password in your application.property 
+
+
+#spring.security.user.name=komal
+#spring.security.user.password=123
+
+we have another way to overrite spring security
+
+create a package parallel with your base package.
+.example---> com.learn.config
+create class inside this package.
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+@EnableWebSecurity
+@Configuration
+public class CustomSecurity {
+
+	
+	// 2nd way to create in-memory user 
+	
+	@Bean
+	public InMemoryUserDetailsManager getUserDetails()
+	{
+		UserDetails user = User.withDefaultPasswordEncoder().username("komal").password("1234").roles("USER").build();
+
+UserDetails admin = User.withDefaultPasswordEncoder().username("harendra").password("1234").roles("ADMIN").build();
+		
+		return new InMemoryUserDetailsManager(user,admin);
+		
+	}
+}
+
+
+
+

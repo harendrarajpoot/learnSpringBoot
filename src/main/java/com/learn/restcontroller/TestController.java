@@ -16,7 +16,11 @@ public class TestController {
 	@GetMapping("/")
 	public String home()
 	{
-		return "<h1 style='color:red'>This is Home with slash</h1>";
+		String st1="<h1 style='color:red'> this is h1 Heading</h1>";
+		String st2="<h2> this is h1 Heading</h2>";
+		String st3="<h3> this is h1 Heading</h3>";
+		
+		return "<h1 style='color:red'> this is h1 Heading</h1>";
 	}
 	
 	

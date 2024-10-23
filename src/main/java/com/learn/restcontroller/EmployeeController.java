@@ -2,6 +2,9 @@ package com.learn.restcontroller;
 
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,14 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.learn.exception.EmployeeNotFoundException;
 import com.learn.model.Employee;
 import com.learn.service.EmployeeService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
 
 	private EmployeeService employeeService;
+	
+	
 
 	public EmployeeController(EmployeeService employeeService) {
 		super();
@@ -46,6 +55,8 @@ public class EmployeeController {
 		 * System.out.println(employee.getEmpSalary());
 		 * System.out.println(employee.getEmpStatus());
 		 */
+		
+		log.info("EmployeeController--->saveEmployee--->Staring.");
 
 		System.out.println("EmployeeController--->saveEmployee--->Staring...");
 
@@ -73,24 +84,29 @@ public class EmployeeController {
 	// http://localhost:8081/employee/getEmployee/101
 
 	@GetMapping("/getEmployee/{empCode}")
-	public Employee getEmployee(@PathVariable Integer empCode) {
-		return employeeService.getEmployee(empCode);
+	public ResponseEntity<Employee> getEmployee(@PathVariable Integer empCode) {
+		
+		Employee employee = employeeService.getEmployee(empCode).
+				orElseThrow(()->new EmployeeNotFoundException("Employee Not found as ID :"+empCode));
+
+		System.out.println("EmployeeController--->getEmployeeByQueryParamter---->END");
+
+		return new ResponseEntity<Employee>(employee,HttpStatus.OK);
 	}
 
 	// get single employee with query parameter
 	// http://localhost:8081/employee/getEmployee?empCode=101
 
 	@GetMapping("/getEmployee")
-	public Employee getEmployeeByQueryParamter(@RequestParam Integer empCode) {
-		System.out.println("EmployeeController--->getEmployeeByQueryParamter---->Staring");
-		Employee employee = employeeService.getEmployee(empCode);
+	public ResponseEntity<Employee> getEmployeeByQueryParamter(@RequestParam Integer empCode) {
+		Employee employee = employeeService.getEmployee(empCode).
+				orElseThrow(()->new EmployeeNotFoundException("Employee Not found as ID :"+empCode));
 
 		System.out.println("EmployeeController--->getEmployeeByQueryParamter---->END");
 
-		return employee;
+		return ResponseEntity.ok(employee);
+	
 	}
-	
-	
 	// Delete single employee
 		// http://localhost:8081/employee/deleteEmployee/101
 	
